@@ -11,8 +11,8 @@ module.exports ={
         let invalidFields = [];
         let errors = [];
         //checando se campos não vieram vazios e se respeitam os tamanhos mínimo e máximo do campo
-        model.name = !validator.isEmpty(data.name) && validator.isLenght(data.name,{min: 3,max:100});
-        model.artistName = !validator.isEmpty(data.artistName) && validator.isLenght(data.artistName,{min: 3,max:100});
+        model.name = !validator.isEmpty(data.name) && validator.isLength(data.name,{min: 3,max:100});
+        model.artistName = !validator.isEmpty(data.artistName) && validator.isLength(data.artistName,{min: 3,max:100});
 
         for(let attribute in model){
             isValid = isValid && model[attribute];
@@ -32,8 +32,8 @@ module.exports ={
         let invalidFields = [];
         let errors = [];
         //checando se campos não vieram vazios e se respeitam os tamanhos mínimo e máximo do campo
-        if(model.name) model.name = !validator.isEmpty(data.name) && validator.isLenght(data.name,{min: 3,max:100});
-        if(model.artistName) model.artistName = !validator.isEmpty(data.artistName) && validator.isLenght(data.artistName,{min: 3,max:100});
+        if(model.name) model.name = !validator.isEmpty(data.name) && validator.isLength(data.name,{min: 3,max:100});
+        if(model.artistName) model.artistName = !validator.isEmpty(data.artistName) && validator.isLength(data.artistName,{min: 3,max:100});
 
         for(let attribute in model){
             isValid = isValid && model[attribute];

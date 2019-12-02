@@ -17,9 +17,11 @@ const app = express();
     
 // });
 app.use(express.json());
-app.use(cors);
+//app.use(cors);
 // Importando rotas
 const routes = require('./routes');
 app.use('/api', routes);
 
 app.listen('3000',()=> console.log('escutando na porta 3000'));
+
+//connection.end();

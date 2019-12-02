@@ -3,30 +3,39 @@ var Collection = require('./collection').Collection;
 var collectionValidator = require('./collectionValidator');
 const uuid = require('uuid/v4');
 
-module.exports = {
-    execQuery(query,res){//método genérico para fazer as queries, estabelecendo uma conexão e finalizando ao final de cada query
-        var connection = mysql.createConnection({
-            host: 'localhost',
-            port: '3306',
-            database: 'case_pd',
-            user: 'root'
-        });
+function execQuery(query,res){//método genérico para fazer as queries, estabelecendo uma conexão e finalizando ao final de cada query
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        port: '3306',
+        database: 'case_pd',
+        user: 'root'
+    });
 
-        connection.query(query, function(error,results,fields){
-            if(error) res.statusCode(500).json(error);
-            else{
-                console.log(results);
-                res.statusCode(200).json({results, message: "Sucesso."});
-            }
-            connection.end();
-        });
-    },
+    connection.connect(function(err) {
+        if (err) {
+          console.error('error connecting: ' + err.stack);
+          return;
+        }
+       
+        console.log('connected as id ' + connection.threadId);
+    });
+
+    connection.query({sql:query, timeout: 10000}, function(error,results,fields){
+        if(error) res.status(500).json(error);
+        else{
+            res.status(200).json({results, message: "Sucesso."});
+        }
+        connection.end();
+    });
+}
+
+module.exports = {
     findAll(req,res){
-        this.execQuery("SELECT * FROM collections",res);
+        execQuery("SELECT * FROM collections",res);
     },
     findCollectionById(req,res){
         let id = req.params.id;
-        this.execQuery("SELECT * FROM collection WHERE id="+id,res);
+        execQuery(`SELECT * FROM collections WHERE id='${id}'`,res);
     },
     // findDiscsByCollectionId(req,res){ VAI PARA ENDPOINT DE DISCS
     //     let collectionId = req.params.collectionid;
@@ -42,7 +51,7 @@ module.exports = {
 
         const {isValid,invalidFields,errors} = collectionValidator.add({name,artistName});
         if(isValid){
-            this.execQuery(`INSERT INTO collections(id,name,artistName) VALUES ('${uuid()}','${name}','${artistName}')`);
+            execQuery(`INSERT INTO collections(id,name,artistName) VALUES ('${uuid()}','${name}','${artistName}')`,res);
         }else{
             return res.status(500).json({invalidFields,errors});
         }
@@ -54,10 +63,10 @@ module.exports = {
         const {isValid,invalidFields,errors} = collectionValidator.update({name,artistName});
         if(isValid){
             var updateQuery = "UPDATE collections SET";
-            if(name) updateQuery.concat(` name='${name}'`);
-            if(artistName) updateQuery.concat(` artistName='${artistName}'`);
-            updateQuery.concat(`WHERE id='${id}'`);
-            this.execQuery(updateQuery,res);
+            if(name) updateQuery = updateQuery.concat(` name='${name}'`);
+            if(artistName) updateQuery = updateQuery.concat(` artistName='${artistName}'`);
+            updateQuery = updateQuery.concat(` WHERE id='${id}'`);
+            execQuery(updateQuery,res);
         }else{
             return res.status(500).json({invalidFields,errors});
         }
@@ -65,7 +74,7 @@ module.exports = {
     delete(req,res){
         let id = req.params.id;
         if(id){
-            this.execQuery(`DELETE FROM collections WHERE id=${id}`,res);
+            execQuery(`DELETE FROM collections WHERE id='${id}'`,res);
         }else{
             return res.statusCode(500).json({message:"Precisa fornecer o id para poder deletar!"});
         }
