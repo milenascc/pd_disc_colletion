@@ -3,7 +3,7 @@ var Collection = require('./collection').Collection;
 var collectionValidator = require('./collectionValidator');
 const uuid = require('uuid/v4');
 
-function execQuery(query,res){//método genérico para fazer as queries, estabelecendo uma conexão e finalizando ao final de cada query
+function execQuery(query,res,nestedQuery=null){//método genérico para fazer as queries, estabelecendo uma conexão e finalizando ao final de cada query
     var connection = mysql.createConnection({
         host: 'localhost',
         port: '3306',
@@ -21,9 +21,12 @@ function execQuery(query,res){//método genérico para fazer as queries, estabel
     });
 
     connection.query({sql:query, timeout: 10000}, function(error,results,fields){
-        if(error) res.status(500).json(error);
+        if(error){
+            console.log(error);
+            res.status(500).json(error);
+        } 
         else{
-            res.status(200).json({results, message: "Sucesso."});
+            if(nestedQuery==null) res.status(200).json({results, message: "Sucesso."});
         }
         connection.end();
     });
@@ -73,7 +76,9 @@ module.exports = {
     },
     delete(req,res){
         let id = req.params.id;
+        
         if(id){
+            execQuery(`DELETE FROM discs WHERE fk_collection_Id='${id}'`,res,true);
             execQuery(`DELETE FROM collections WHERE id='${id}'`,res);
         }else{
             return res.statusCode(500).json({message:"Precisa fornecer o id para poder deletar!"});

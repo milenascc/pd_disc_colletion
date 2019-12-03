@@ -44,7 +44,9 @@ CREATE TABLE `discs` (
   `name` varchar(100) NOT NULL,
   `tracks` text NOT NULL,
   `fk_collection_Id` varchar(45) NOT NULL,
-  `img_url` text DEFAULT NULL
+  `img_url` text DEFAULT NULL,
+  `info` text DEFAULT NULL,
+  `id` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
