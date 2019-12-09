@@ -1,7 +1,8 @@
 <template>
   <div class="hello">
     <h3>Coleções</h3>
-    <button>Criar nova coleção</button>
+    <button v-on:click="visualizeCollectionForm">Criar nova coleção</button>
+    <button>Adicionar disco</button>
     <div v-for="item in collections" v-bind:key="item.id">
       <router-link v-bind:to="{ name: 'collection', params: { id: item.id }}">{{item.name}}</router-link>
     </div> 
@@ -10,6 +11,7 @@
       <input id="collectionName" type="text" maxlength="100"/>
       <h5>Nome do(s) artista(s)/banda(s):</h5><span class="required-item">*</span>
       <input id="artistName" type="text" maxlength="100"/>
+      <button v-on:click="addCollection">Salvar</button>
     </div>
   </div>  
 </template>
@@ -24,7 +26,8 @@ export default {
   },
   data: function() {
     return{
-      collections: []
+      collections: [],
+      bool: false
     }
   },
   mounted(){
@@ -46,9 +49,17 @@ export default {
       }).then(result=>{
         var r = JSON.parse(JSON.stringify(result.data));
         if(r.message) alert(r.message);
+        this.getCollections();
       }).catch(error=>{
         console.log(error);
       });
+    },
+    visualizeCollectionForm: function(){
+      if(this.bool){
+        document.getElementsByClassName('form-collection')[0].style.display = 'none'; 
+      }else{
+        document.getElementsByClassName('form-collection')[0].style.display = 'block'; 
+      }
     }
   }
 }

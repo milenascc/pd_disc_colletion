@@ -1,16 +1,22 @@
 <template>
   <div class="hello">
+    <div class="navigation-btns">
+      <button id="editButton">Editar</button>
+      <button>Excluir</button>
+    </div>
+    <h3>{{disc.name}}</h3>
+    <div v-if="disc.imgUrl">
+      <img v-bind:src="disc.imgUrl" />
+    </div>
     <table>
       <thead>
         <tr>
-          <th>Nome do disco</th>
           <th>Faixas</th>
           <th>Sobre o disco</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>{{disc.name}}</td>
           <td>{{disc.tracks}}</td>
           <td>{{disc.info}}</td>
         </tr>
@@ -29,7 +35,9 @@ export default {
   },
   data: function(){
     return {
-      disc: {}
+      disc: {},
+      name: '',
+      tracks: '' 
     }
   },
   async mounted(){
@@ -39,7 +47,6 @@ export default {
     getDiscInfo: async function(){
       axios.get('http://localhost:3000/api/disc/'+this.id).then(result=>{
         this.disc = JSON.parse(JSON.stringify(result.data.results[0]));
-        console.log(this.disc);
       }).catch(error=>{
         console.log(error);
         alert("Não foi possível obter os dados do disco!");

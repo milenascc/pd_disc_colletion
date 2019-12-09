@@ -13,6 +13,7 @@ const discController = require('./disc/discController');
 
 router.post('/disc',discController.add);
 router.get('/disc/findDiscsByCollectionId/:collectionId',discController.findDiscsByCollectionId);
+router.get('/disc/no-collection',discController.findDiscsWihtoutCollection);
 router.get('/disc',discController.findAll);
 router.get('/disc/:id',discController.findDiscById);
 router.put('/disc/:id',discController.update);

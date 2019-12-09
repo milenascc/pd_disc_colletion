@@ -48,6 +48,11 @@ module.exports = {
             return res.status(statusCode).json({message: "O id da Coleção deve ser fornecido!"});
         }
     },
+    findDiscsWihtoutCollection(req,res){ 
+        let statusCode = 500;
+
+        execQuery(`SELECT * FROM discs WHERE fk_collection_Id IS NULL`,res);       
+    },
     add(req,res){
         let {name, fk_collection_Id, tracks, info, img_url} = req.body;
 

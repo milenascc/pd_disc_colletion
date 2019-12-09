@@ -8,7 +8,7 @@
     </ul>
     <div class="navigation-btns">
       <button id="editButton" v-on:click="getInformation">Editar</button>
-      <button>Excluir</button>
+      <button v-on:click="deleteCollection">Excluir</button>
     </div>
     <div class="form-collection">
       <h5><span class="required-item">*</span>Nome da coleção:</h5>
@@ -16,7 +16,7 @@
       <h5><span class="required-item">*</span>Nome do(s) artista(s)/banda(s):</h5>
       <input id="artistName" type="text" maxlength="100"/>
       <br/>
-      <select multiple id="collectionDiscs">
+      <select multiple id="collectionDiscs" v-if="allDiscs.length>0">
         <option v-for="disc in allDiscs" v-bind:key="disc.id" v-bind:id="disc.id" v-bind:value="disc.id">{{disc.name}}</option>
       </select>
       <button v-on:click="update">Salvar alterações</button>
@@ -57,9 +57,12 @@ export default {
       });
     },
     getInformation: function(){
-      //listar todos os discos para adicionar discos à coleção através do formulário
-      axios.get('http://localhost:3000/api/disc/').then(result=>{
-        this.allDiscs = JSON.parse(JSON.stringify(result.data.results));
+      //listar todos os discos que não pertencem a nenhuma coleção
+      //para adicionar discos à coleção através do formulário
+      axios.get('http://localhost:3000/api/disc/no-collection').then(result=>{
+        result.data.results.forEach(element => {
+          this.allDiscs.push(JSON.parse(JSON.stringify(element)));
+        });
       }).catch(error=>{
         console.log(error);
       });
@@ -89,7 +92,15 @@ export default {
       }).catch(error=>{
         alert("Não foi possível editar! "+error);
       });
-
+    },
+    deleteCollection: function(){
+      axios.delete('http://localhost:3000/api/collection/'+this.id).then(result=>{
+        alert(result.data.message);
+        this.$router.push('/');
+      }).catch(error=>{
+        console.log(error);
+        alert("Não foi possível deletar. Desculpe o transtorno");
+      })
     }
   }
 }
