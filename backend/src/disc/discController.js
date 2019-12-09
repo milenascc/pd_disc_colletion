@@ -67,7 +67,7 @@ module.exports = {
         let {name, fk_collection_Id, tracks, info, img_url} = req.body;
         let id = req.params.id;
 
-        const {isValid,invalidFields,errors} = discValidator.update({name, info, tracks, img_url, fk_collection_Id});
+        const {isValid,invalidFields,errors} = discValidator.update({name, info, tracks, img_url});
         if(isValid){
             var updateQuery = "UPDATE discs SET";
             if(name) updateQuery = updateQuery.concat(` name='${name}'`);

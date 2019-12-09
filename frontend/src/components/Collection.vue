@@ -16,9 +16,11 @@
       <h5><span class="required-item">*</span>Nome do(s) artista(s)/banda(s):</h5>
       <input id="artistName" type="text" maxlength="100"/>
       <br/>
+      <h5>Adicionar discos</h5>
       <select multiple id="collectionDiscs" v-if="allDiscs.length>0">
         <option v-for="disc in allDiscs" v-bind:key="disc.id" v-bind:id="disc.id" v-bind:value="disc.id">{{disc.name}}</option>
       </select>
+      <br/>
       <button v-on:click="update">Salvar alterações</button>
     </div>
   </div>
@@ -82,13 +84,28 @@ export default {
         console.log(error);
       });
     },
-    update: function(){
+    update: async function(){
       const artistName = document.getElementById('artistName').value;
       var obj = {};
       if(this.name.length>0) obj.name = this.name;
       if(artistName) obj.artistName = artistName;
+      var options = Array.from(document.getElementById('collectionDiscs').options);
+      options = options.filter(elem=>{
+        return elem.selected==true;
+      });
+      
+      for(var x=0;x<options.length;x++){
+        let item = options[x];
+        
+        axios.put('http://localhost:3000/api/disc/'+item.value,{fk_collection_Id: this.id}).then(result=>{
+          alert(result.data.message);
+        }).catch(error=>{
+          console.log(error);
+        });
+      }
       axios.put('http://localhost:3000/api/collection/'+this.id,obj).then(result=>{
         alert(result.data.message);
+        this.getDiscs();
       }).catch(error=>{
         alert("Não foi possível editar! "+error);
       });

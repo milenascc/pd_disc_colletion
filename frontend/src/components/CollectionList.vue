@@ -23,6 +23,7 @@
         <h5>Link de imagem da capa:</h5>
         <input id="imgUrl" type="text" maxlength="300"/>
         <select id="collectionId">
+          <option disabled selected></option>
           <option v-for="col in collections" v-bind:key="col.id" v-bind:value="col.id">{{col.name}}</option>
         </select>
         <button v-on:click="addDisc">Salvar</button>
