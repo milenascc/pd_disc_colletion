@@ -69,15 +69,17 @@ module.exports = {
 
         const {isValid,invalidFields,errors} = discValidator.update({name, info, tracks, img_url});
         if(isValid){
+            console.log(req.body);
             var updateQuery = "UPDATE discs SET";
             if(name) updateQuery = updateQuery.concat(` name='${name}'`);
             if(tracks) updateQuery = updateQuery.concat(` tracks='${tracks}'`);
             if(info) updateQuery = updateQuery.concat(` info='${info}'`);
             if(img_url) updateQuery = updateQuery.concat(` img_url='${img_url}'`);
             if(fk_collection_Id) updateQuery = updateQuery.concat(` fk_collection_Id='${fk_collection_Id}'`);
+            else updateQuery = updateQuery.concat(` fk_collection_Id=NULL`);
             //inserindo vírgulas caso tenha mais de uma coluna a ser editada
-            var subs = updateQuery.substring(updateQuery.indexOf('SET')+3,updateQuery.indexOf('WHERE'));
-            console.log(subs);
+            //var subs = updateQuery.substring(updateQuery.indexOf('SET')+3,updateQuery.indexOf('WHERE'));
+            //console.log(subs);
             updateQuery = updateQuery.concat(` WHERE id='${id}'`);
             execQuery(updateQuery,res);
         }else{
