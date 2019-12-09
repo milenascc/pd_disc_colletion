@@ -35,6 +35,7 @@ export default {
       axios.get('http://localhost:3000/api/collection').then((result) =>{
         this.collections = JSON.parse(JSON.stringify(result.data.results));
       }).catch((error)=>{
+        if(error.statusCode) alert("Servidor desconectado!");
         console.log(error);
       });
     },
@@ -68,5 +69,9 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.form-collection{
+  display: none;
 }
 </style>

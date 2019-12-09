@@ -22,6 +22,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 30px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.form-collection{
+  border-style: 2px solid black;
 }
 </style>

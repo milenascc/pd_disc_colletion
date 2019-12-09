@@ -70,6 +70,9 @@ module.exports = {
             if(info) updateQuery = updateQuery.concat(` info='${info}'`);
             if(img_url) updateQuery = updateQuery.concat(` img_url='${img_url}'`);
             if(fk_collection_Id) updateQuery = updateQuery.concat(` fk_collection_Id='${fk_collection_Id}'`);
+            //inserindo vírgulas caso tenha mais de uma coluna a ser editada
+            var subs = updateQuery.substring(updateQuery.indexOf('SET')+3,updateQuery.indexOf('WHERE'));
+            console.log(subs);
             updateQuery = updateQuery.concat(` WHERE id='${id}'`);
             execQuery(updateQuery,res);
         }else{

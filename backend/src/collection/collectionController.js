@@ -67,8 +67,10 @@ module.exports = {
         if(isValid){
             var updateQuery = "UPDATE collections SET";
             if(name) updateQuery = updateQuery.concat(` name='${name}'`);
+            if(artistName && name) updateQuery += ",";
             if(artistName) updateQuery = updateQuery.concat(` artistName='${artistName}'`);
             updateQuery = updateQuery.concat(` WHERE id='${id}'`);
+            console.log(updateQuery);
             execQuery(updateQuery,res);
         }else{
             return res.status(500).json({invalidFields,errors});
