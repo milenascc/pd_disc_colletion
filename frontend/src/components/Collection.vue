@@ -43,8 +43,9 @@ export default {
     this.getDiscs();
   },
   methods:{
-    modifiedName: function(event){
-      console.log(event);
+    modifiedName: function(){
+      //para ficar ciente caso o campo nome tenhja sido modificado
+      //senão, ao enviar na requisição, dá erro por burlar restrição unique do campo
       this.name = document.getElementById('collectionName').value;
     },
     getDiscs: function(){
@@ -52,7 +53,6 @@ export default {
       axios.get('http://localhost:3000/api/disc/findDiscsByCollectionId/'+this.id).then(result=>{
         this.discs = JSON.parse(JSON.stringify(result.data.results));
       }).catch(error=>{
-        alert()
         console.log(error);
       });
     },
