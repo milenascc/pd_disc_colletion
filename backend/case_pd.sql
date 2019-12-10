@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02-Dez-2019 às 00:39
+-- Tempo de geração: 10-Dez-2019 às 02:42
 -- Versão do servidor: 10.4.8-MariaDB
 -- versão do PHP: 7.1.33
 
@@ -34,6 +34,15 @@ CREATE TABLE `collections` (
   `id` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Extraindo dados da tabela `collections`
+--
+
+INSERT INTO `collections` (`name`, `artistName`, `id`) VALUES
+('rhreq', 'aweqwr', '4f9db1ad-7d97-427f-a2fd-07a48870f2b4'),
+('Melhores de Pitty', 'Pitty', '7e910a50-a23b-406f-b75b-dfc6c069e348'),
+('Melhores de Roberto Carlos', 'Roberto Carlos', 'd5791740-9647-439f-baff-97395cbed985');
+
 -- --------------------------------------------------------
 
 --
@@ -43,11 +52,22 @@ CREATE TABLE `collections` (
 CREATE TABLE `discs` (
   `name` varchar(100) NOT NULL,
   `tracks` text NOT NULL,
-  `fk_collection_Id` varchar(45) NOT NULL,
+  `fk_collection_Id` varchar(45) DEFAULT NULL,
   `img_url` text DEFAULT NULL,
   `info` text DEFAULT NULL,
   `id` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `discs`
+--
+
+INSERT INTO `discs` (`name`, `tracks`, `fk_collection_Id`, `img_url`, `info`, `id`) VALUES
+('Setevidas', 'Setevidas, Pouco, Deixa ela entrar, Pequena morte', '7e910a50-a23b-406f-b75b-dfc6c069e348', '', 'Ano: 2014, Gravadora: Deckdisc;Gênero: Rock alterninha', '001aa739-9faf-46af-862c-a621b379b519'),
+('ee4wgg', 'seegahej,srtrjryj  drrgeh', '4f9db1ad-7d97-427f-a2fd-07a48870f2b4', '', 'fefefecc', '46e18a20-6a24-4d88-9d4d-f8e924a9f301'),
+('Esse cara sou eu', 'Esse cara sou eu, Emoções', 'd5791740-9647-439f-baff-97395cbed985', '', 'múmia', '5f5a00f3-cf7c-4f39-ae33-b7e738f28634'),
+('hystrix', 'etewtw', NULL, '', 'etew', '611c01de-d394-4071-b4f3-3292f26a36d3'),
+('Admirável Chip Novo', 'Teto de Vidro, Admirável Chip Novo, Máscara, Equalize', '7e910a50-a23b-406f-b75b-dfc6c069e348', '', 'Ano: 2003, Gravadora: Deckdisc-Polysom;Produção: Rafael Ramos;Duração 39:31;Disco Diamante', '7f131b35-f7ea-49c6-82a7-f6575bdbe1d3');
 
 --
 -- Índices para tabelas despejadas
@@ -65,6 +85,7 @@ ALTER TABLE `collections`
 -- Índices para tabela `discs`
 --
 ALTER TABLE `discs`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_collection` (`fk_collection_Id`);
 
 --
