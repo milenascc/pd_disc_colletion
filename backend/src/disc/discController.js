@@ -68,8 +68,7 @@ module.exports = {
         let id = req.params.id;
 
         const {isValid,invalidFields,errors} = discValidator.update({name, info, tracks, img_url});
-        if(isValid){
-            console.log(req.body);
+        if(isValid){  
             var updateQuery = "UPDATE discs SET";
             if(name) updateQuery = updateQuery.concat(` name='${name}'`);
             if(tracks) updateQuery = updateQuery.concat(` tracks='${tracks}'`);
@@ -78,9 +77,9 @@ module.exports = {
             if(fk_collection_Id) updateQuery = updateQuery.concat(` fk_collection_Id='${fk_collection_Id}'`);
             else updateQuery = updateQuery.concat(` fk_collection_Id=NULL`);
             //inserindo vírgulas caso tenha mais de uma coluna a ser editada
-            //var subs = updateQuery.substring(updateQuery.indexOf('SET')+3,updateQuery.indexOf('WHERE'));
-            //console.log(subs);
-            updateQuery = updateQuery.concat(` WHERE id='${id}'`);
+            updateQuery = "UPDATE discs SET "+ updateQuery.substring(updateQuery.indexOf('SET')+4).replace(/\'(\s)+/g,'\',');
+            updateQuery = updateQuery.concat(` WHERE id='${id}'`);  
+            
             execQuery(updateQuery,res);
         }else{
             return res.status(500).json({invalidFields,errors});

@@ -37,6 +37,7 @@ module.exports ={
         let isValid = true;
         let invalidFields = [];
         let errors = [];
+            
         //checando se campos não vieram vazios e se respeitam os tamanhos mínimo e máximo do campo
         if(data.name){
             model.name = validator.trim(data.name);

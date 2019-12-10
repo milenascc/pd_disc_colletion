@@ -30,4 +30,9 @@ export default {
 .form-collection{
   border-style: 2px solid black;
 }
+
+.required-item{
+  color: red;
+  font-weight: bolder;
+}
 </style>
