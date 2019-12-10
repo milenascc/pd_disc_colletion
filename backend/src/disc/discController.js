@@ -93,5 +93,10 @@ module.exports = {
         }else{
             return res.statusCode(500).json({message:"Precisa fornecer o id para poder deletar!"});
         }
+    },
+    findDiscsByWordSearch(req,res){
+        let search = req.params.search;
+
+        execQuery(`SELECT * FROM discs WHERE name LIKE '%${search}%' OR tracks LIKE '%${search}%' OR info LIKE '%${search}%'`,res);
     }
 }

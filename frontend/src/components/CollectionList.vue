@@ -1,11 +1,15 @@
 <template>
   <div class="hello">
     <h3>Coleções</h3>
-    <button v-on:click="visualizeCollectionForm(true)">Criar nova coleção</button>
-    <button v-on:click="visualizeCollectionForm(false)">Adicionar disco</button>
-    <div v-for="item in collections" v-bind:key="item.id">
-      <router-link v-bind:to="{ name: 'collection', params: { id: item.id }}">{{item.name}}</router-link>
-    </div> 
+    <div class="navigation-btns">
+      <button v-on:click="visualizeCollectionForm(true)">Criar nova coleção</button>
+      <button v-on:click="visualizeCollectionForm(false)">Adicionar disco</button>
+    </div>
+    <ul>
+      <li v-for="item in collections" v-bind:key="item.id">
+        <router-link v-bind:to="{ name: 'collection', params: { id: item.id }}">{{item.name}}</router-link>
+      </li> 
+    </ul>
     <div class="form">
       <h5 v-if="isCollection"><span class="required-item">*</span>Nome da coleção:</h5>
       <h5 v-if="!isCollection"><span class="required-item">*</span>Nome do disco:</h5>
@@ -29,6 +33,15 @@
         <button v-on:click="addDisc">Salvar</button>
       </div>
     </div>
+    <div id="searchDiscs">
+      <p>Procure por algum termo para acharmos um disco</p>
+      <input v-model="search" />
+      <ul>
+        <li v-for="d in discs" v-bind:key="d.id" v-on:click="goToDiscDetail(d.id)">
+          {{d.name}}
+        </li>
+      </ul>
+    </div>
   </div>  
 </template>
 
@@ -43,12 +56,26 @@ export default {
   data: function() {
     return{
       collections: [],
+      discs: [],
       boolVisible: false,
-      isCollection: false
+      isCollection: false,
+      search: ''
     }
   },
   mounted(){
     this.getCollections();
+  },
+  watch:{
+    search: function(oldSearch,newSearch){
+      if(newSearch.length>4){
+        axios.get('http://localhost:3000/api/disc/search/'+this.search).then(result=>{
+          this.discs = JSON.parse(JSON.stringify(result.data.results));
+        }).catch((error)=>{
+          console.log(error);
+          alert("A pesquisa não pode ser realizada!");
+        })
+      }
+    }
   },
   methods:{
     getCollections: function(){
@@ -97,15 +124,18 @@ export default {
       }else{
         document.getElementsByClassName('form')[0].style.display = 'block'; 
       }
+    },
+    goToDiscDetail(id){
+      this.$router.push('/disc/'+id);
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h3 {
-  margin: 40px 0 0;
+  margin: 20px 0 0;
 }
 ul {
   list-style-type: none;
@@ -127,5 +157,23 @@ a {
 .form{
   display: none;
   text-align: left;
+}
+
+.hello{
+  display: flex;
+  flex-direction: column;
+}
+.navigation-btns{
+  margin-bottom: 1rem;
+}
+
+.navigation-btns button{
+  margin-right: 1rem;
+  background-color: #0a3623;
+  color: white;
+  border-radius: 5px;
+  border-style: outset;
+  border-color: #36604b;
+  padding: 0.25rem;
 }
 </style>

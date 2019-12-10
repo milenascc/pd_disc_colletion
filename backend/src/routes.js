@@ -16,6 +16,7 @@ router.get('/disc/findDiscsByCollectionId/:collectionId',discController.findDisc
 router.get('/disc/no-collection',discController.findDiscsWihtoutCollection);
 router.get('/disc',discController.findAll);
 router.get('/disc/:id',discController.findDiscById);
+router.get('/disc/search/:search',discController.findDiscsByWordSearch);
 router.put('/disc/:id',discController.update);
 router.delete('/disc/:id',discController.delete);
 
